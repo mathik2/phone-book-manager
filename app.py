@@ -31,9 +31,14 @@ def delete(name):
 
 @app.route('/update/<name>', methods=['POST'])
 def update(name):
+    new_name = request.form.get('new_name', name)
     phone = request.form.get('phone')
     email = request.form.get('email')
-    update_contact(name, phone, email)
+    if new_name != name:
+        # Update name, phone, and email
+        update_contact_name(name, new_name, phone, email)
+    else:
+        update_contact(name, phone, email)
     return jsonify({'success': True})
 
 if __name__ == '__main__':

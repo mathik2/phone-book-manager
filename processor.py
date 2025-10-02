@@ -42,6 +42,10 @@ def update_contact(name, phone, email):
     cursor.execute("UPDATE contacts SET phone=%s, email=%s WHERE name=%s", (phone, email, name))
     conn.commit()
 
+def update_contact_name(old_name, new_name, phone, email):
+    cursor.execute("UPDATE contacts SET name=%s, phone=%s, email=%s WHERE name=%s", (new_name, phone, email, old_name))
+    conn.commit()
+
 def search_contacts(query):
     cursor.execute(
         "SELECT * FROM contacts WHERE name ILIKE %s OR phone ILIKE %s OR email ILIKE %s ORDER BY name",

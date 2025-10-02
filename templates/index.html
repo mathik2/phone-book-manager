@@ -148,7 +148,7 @@
         .actions form button:hover {
             background: linear-gradient(90deg, #ff7f7f 60%, #ff4f4f 100%);
         }
-        input.edit-phone, input.edit-email {
+        input.edit-phone, input.edit-email, input.edit-name {
             background: #fff;
             border: 1px solid #a5b4fc;
             border-radius: 6px;
@@ -157,7 +157,7 @@
             width: 100%;
             transition: border-color 0.2s;
         }
-        input.edit-phone:focus, input.edit-email:focus {
+        input.edit-phone:focus, input.edit-email:focus, input.edit-name:focus {
             border-color: #2563eb;
         }
 
@@ -239,7 +239,7 @@
                 border-radius: 6px;
                 box-sizing: border-box;
             }
-            input.edit-phone, input.edit-email {
+            input.edit-phone, input.edit-email, input.edit-name {
                 font-size: 15px;
                 padding: 9px 8px;
                 border-radius: 6px;
@@ -273,7 +273,9 @@
             <tbody id="contactsTableBody">
                 {% for contact in contacts %}
                 <tr data-name="{{ contact[0] }}">
-                    <td data-label="Name">{{ contact[0] }}</td>
+                    <td data-label="Name">
+                        <input type="text" value="{{ contact[0] }}" class="edit-name" readonly>
+                    </td>
                     <td data-label="Phone">
                         <input type="text" value="{{ contact[1] }}" class="edit-phone" readonly>
                     </td>
@@ -310,7 +312,7 @@
                     data.forEach(contact => {
                         tbody.innerHTML += `
                             <tr data-name="${contact.name}">
-                                <td>${contact.name}</td>
+                                <td><input type="text" value="${contact.name}" class="edit-name" readonly></td>
                                 <td><input type="text" value="${contact.phone}" class="edit-phone" readonly></td>
                                 <td><input type="email" value="${contact.email}" class="edit-email" readonly></td>
                                 <td class="actions">
@@ -331,25 +333,29 @@
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('edit-btn')) {
             const tr = e.target.closest('tr');
+            tr.querySelector('.edit-name').readOnly = false;
             tr.querySelector('.edit-phone').readOnly = false;
             tr.querySelector('.edit-email').readOnly = false;
             tr.querySelector('.save-btn').classList.add('active');
             e.target.style.display = 'none';
-            tr.querySelector('.edit-phone').focus();
+            tr.querySelector('.edit-name').focus();
         }
         if (e.target.classList.contains('save-btn')) {
             const tr = e.target.closest('tr');
-            const name = tr.getAttribute('data-name');
+            const oldName = tr.getAttribute('data-name');
+            const newName = tr.querySelector('.edit-name').value;
             const phone = tr.querySelector('.edit-phone').value;
             const email = tr.querySelector('.edit-email').value;
-            fetch(`/update/${encodeURIComponent(name)}`, {
+            fetch(`/update/${encodeURIComponent(oldName)}`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                body: `phone=${encodeURIComponent(phone)}&email=${encodeURIComponent(email)}`
+                body: `new_name=${encodeURIComponent(newName)}&phone=${encodeURIComponent(phone)}&email=${encodeURIComponent(email)}`
             })
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
+                    tr.setAttribute('data-name', newName);
+                    tr.querySelector('.edit-name').readOnly = true;
                     tr.querySelector('.edit-phone').readOnly = true;
                     tr.querySelector('.edit-email').readOnly = true;
                     tr.querySelector('.edit-btn').style.display = 'inline-block';
