@@ -42,6 +42,20 @@ A web-based phone book manager for storing, searching, editing, and deleting con
 
 See `render.yaml` for deployment configuration on [Render](https://render.com/).
 
+## Live Demo
+
+You can try out the project here:  
+[https://phone-book-manager.onrender.com/](https://phone-book-manager.onrender.com/)
+
+## Project Preview
+
+![Phone Book Manager Preview](project_preview.png)
+
+<!--
+> 
+> To preview the app, click the link above.
+-->
+
 ## License
 
 MIT License (add your preferred license here)
