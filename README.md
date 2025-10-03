@@ -56,6 +56,3 @@ You can try out the project here:
 > To preview the app, click the link above.
 -->
 
-## License
-
-MIT License (add your preferred license here)
